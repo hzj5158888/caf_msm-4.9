@@ -158,6 +158,31 @@ snd-soc-twl4030-objs := twl4030.o
 snd-soc-twl6040-objs := twl6040.o
 snd-soc-uda134x-objs := uda134x.o
 snd-soc-uda1380-objs := uda1380.o
+<<<<<<< HEAD
+=======
+snd-soc-usb-headset-objs := usb-headset.o
+snd-soc-wcd9320-objs := wcd9320.o wcd9320-tables.o
+snd-soc-wcd9330-objs := wcd9330.o wcd9330-tables.o
+snd-soc-wcd9335-objs := wcd9335.o
+snd-soc-wcd934x-objs := wcd934x.o
+snd-soc-wcd9xxx-objs := wcd9xxx-resmgr.o wcd9xxx-mbhc.o wcd9xxx-common.o wcdcal-hwdep.o
+snd-soc-wcd9xxx-v2-objs := wcd9xxx-common-v2.o wcd9xxx-resmgr-v2.o
+ifeq ($(CONFIG_COMMON_CLK_MSM), y)
+	audio-ext-clock-objs := audio-ext-clk.o
+endif
+
+ifeq ($(CONFIG_COMMON_CLK_QCOM), y)
+	audio-ext-clock-up-objs := audio-ext-clk-up.o
+endif
+snd-soc-wcd-cpe-objs := wcd_cpe_services.o wcd_cpe_core.o
+snd-soc-wsa881x-objs := wsa881x.o wsa881x-tables.o wsa881x-regmap.o wsa881x-temp-sensor.o
+snd-soc-wcd-mbhc-objs := wcd-mbhc-v2.o
+snd-soc-wsa881x-analog-objs := wsa881x-analog.o wsa881x-tables-analog.o
+snd-soc-wsa881x-analog-objs += wsa881x-regmap-analog.o wsa881x-irq.o
+snd-soc-wcd-dsp-utils-objs := wcd-dsp-utils.o
+snd-soc-wcd-dsp-mgr-objs := wcd-dsp-mgr.o
+snd-soc-wcd-spi-objs := wcd-spi.o
+>>>>>>> 63f8403463f1... sound: import xiaomi changes
 snd-soc-wl1273-objs := wl1273.o
 snd-soc-wm-adsp-objs := wm_adsp.o
 snd-soc-wm0010-objs := wm0010.o
@@ -379,6 +404,26 @@ obj-$(CONFIG_SND_SOC_TWL4030)	+= snd-soc-twl4030.o
 obj-$(CONFIG_SND_SOC_TWL6040)	+= snd-soc-twl6040.o
 obj-$(CONFIG_SND_SOC_UDA134X)	+= snd-soc-uda134x.o
 obj-$(CONFIG_SND_SOC_UDA1380)	+= snd-soc-uda1380.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_SND_SOC_USB_HEADSET)	+= snd-soc-usb-headset.o
+obj-$(CONFIG_SND_SOC_WCD9320)	+= snd-soc-wcd9320.o
+obj-$(CONFIG_SND_SOC_WCD9330)	+= snd-soc-wcd9330.o
+obj-$(CONFIG_SND_SOC_WCD9335)	+= snd-soc-wcd9335.o
+obj-$(CONFIG_SND_SOC_WCD934X)	+= wcd934x/
+ifeq ($(CONFIG_COMMON_CLK_MSM), y)
+	obj-$(CONFIG_AUDIO_EXT_CLK)	+= audio-ext-clock.o
+endif
+ifeq ($(CONFIG_COMMON_CLK_QCOM), y)
+	obj-$(CONFIG_AUDIO_EXT_CLK)     += audio-ext-clock-up.o
+endif
+obj-$(CONFIG_SND_SOC_WCD9XXX)   += snd-soc-wcd9xxx.o
+obj-$(CONFIG_SND_SOC_WCD9XXX_V2) += snd-soc-wcd9xxx-v2.o
+obj-$(CONFIG_SND_SOC_WCD_CPE)   += snd-soc-wcd-cpe.o
+obj-$(CONFIG_SND_SOC_WCD_MBHC)  += snd-soc-wcd-mbhc.o
+obj-$(CONFIG_SND_SOC_WSA881X)	+= snd-soc-wsa881x.o
+obj-$(CONFIG_SND_SOC_WSA881X_ANALOG)	+= snd-soc-wsa881x-analog.o
+>>>>>>> 63f8403463f1... sound: import xiaomi changes
 obj-$(CONFIG_SND_SOC_WL1273)	+= snd-soc-wl1273.o
 obj-$(CONFIG_SND_SOC_WM0010)	+= snd-soc-wm0010.o
 obj-$(CONFIG_SND_SOC_WM1250_EV1) += snd-soc-wm1250-ev1.o
@@ -440,3 +485,11 @@ obj-$(CONFIG_SND_SOC_WM_HUBS)	+= snd-soc-wm-hubs.o
 obj-$(CONFIG_SND_SOC_MAX9877)	+= snd-soc-max9877.o
 obj-$(CONFIG_SND_SOC_MAX98504)	+= snd-soc-max98504.o
 obj-$(CONFIG_SND_SOC_TPA6130A2)	+= snd-soc-tpa6130a2.o
+<<<<<<< HEAD
+=======
+obj-y += sdm660_cdc/
+obj-y += msm_sdw/
+
+obj-$(CONFIG_SND_SOC_TFA98XX) += tfa98xx/
+obj-$(CONFIG_SND_SOC_TAS2559) += tas2559/
+>>>>>>> 63f8403463f1... sound: import xiaomi changes
