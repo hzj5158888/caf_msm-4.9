@@ -52,12 +52,8 @@ obj-$(CONFIG_RESET_CONTROLLER)	+= reset/
 obj-y				+= tty/
 obj-y				+= char/
 
-<<<<<<< HEAD
 # iommu/ comes before gpu as gpu are using iommu controllers
 obj-$(CONFIG_IOMMU_SUPPORT)	+= iommu/
-=======
-obj-y				+= elliptic/
->>>>>>> 63f8403463f1... sound: import xiaomi changes
 
 # gpu/ comes after char for AGP vs DRM startup and after iommu
 obj-y				+= gpu/
