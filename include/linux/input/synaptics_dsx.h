@@ -171,9 +171,6 @@ struct synaptics_dsx_board_data {
 	int max_y_for_2d;
 	int mdss_reset;
 	int mdss_reset_state;
-	int reset_gpio;
-	int reset_on_state;
-	int max_y_for_2d;
 	int config_array_size;
 	int tp_id_num;
 	unsigned char *tp_id_bytes;
@@ -189,8 +186,6 @@ struct synaptics_dsx_board_data {
 	unsigned int byte_delay_us;
 	unsigned int block_delay_us;
 	unsigned int addr_delay_us;
-	const char *pwr_reg_name;
-	const char *bus_reg_name;
 	bool cut_off_power;
 	bool power_ctrl;
 	bool panel_is_incell;
