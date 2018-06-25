@@ -3911,7 +3911,7 @@ static void smblib_handle_hvdcp_3p0_auth_done(struct smb_charger *chg,
 {
 	const struct apsd_result *apsd_result;
 #ifdef CONFIG_MACH_XIAOMI_MSM8998
-	int current_ua;
+	int current_uA = 0;
 #endif
 	int rc;
 
@@ -3942,13 +3942,13 @@ static void smblib_handle_hvdcp_3p0_auth_done(struct smb_charger *chg,
 
 #ifdef CONFIG_MACH_XIAOMI_MSM8998
 	if (apsd_result->bit & QC_2P0_BIT) {
-		current_ua = HVDCP_CURRENT_UA;
+		current_uA = HVDCP_CURRENT_UA;
 	} else if (apsd_result->bit & QC_3P0_BIT) {
-		current_ua = HVDCP3_CURRENT_UA;
+		current_uA = HVDCP3_CURRENT_UA;
 	}
 
 	vote(chg->usb_icl_votable, LEGACY_UNKNOWN_VOTER, true,
-			current_ua);
+	     current_uA);
 #endif
 }
 
