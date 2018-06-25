@@ -1,7 +1,7 @@
 /*
  * Synaptics DSX touchscreen driver
  *
- * Copyright (C) 2012-2016 Synaptics Incorporated. All rights reserved.
+ * Copyright (C) 2012-2015 Synaptics Incorporated. All rights reserved.
  * Copyright (C) 2017 XiaoMi, Inc.
  *
  * Copyright (C) 2012 Alexandra Chin <alexandra.chin@tw.synaptics.com>
@@ -149,7 +149,6 @@ enum synaptics_dsx_lockdown_area {
  * @reset_active_ms: reset active time
  * @byte_delay_us: delay time between two bytes of SPI data
  * @block_delay_us: delay time between two SPI transfers
- * @addr_delay_us: delay time after sending address word
  * @pwr_reg_name: pointer to name of regulator for power control
  * @lab_reg_name: pointer to name of regulator for LCD lab control
  * @ibb_reg_name: pointer to name of regulator for LCD ibb control
@@ -166,11 +165,11 @@ struct synaptics_dsx_board_data {
 	int irq_on_state;
 	int power_gpio;
 	int power_on_state;
+	int mdss_reset;
+	int mdss_reset_state;
 	int reset_gpio;
 	int reset_on_state;
 	int max_y_for_2d;
-	int mdss_reset;
-	int mdss_reset_state;
 	int config_array_size;
 	int tp_id_num;
 	unsigned char *tp_id_bytes;
@@ -185,7 +184,6 @@ struct synaptics_dsx_board_data {
 	unsigned int reset_active_ms;
 	unsigned int byte_delay_us;
 	unsigned int block_delay_us;
-	unsigned int addr_delay_us;
 	bool cut_off_power;
 	bool power_ctrl;
 	bool panel_is_incell;
