@@ -469,6 +469,21 @@ dtb-$(CONFIG_ARCH_SDM429) += sdm429-mtp.dtb \
 
 endif
 
+ifeq ($(CONFIG_MACH_SAGIT),y)
+dtb-$(CONFIG_ARCH_MSM8998) += \
+	sagit-msm8998-mtp.dtb \
+	sagit-msm8998-v2-mtp.dtb \
+	sagit-msm8998-v2.1-mtp.dtb
+else
+ifeq ($(CONFIG_MACH_CHIRON),y)
+dtb-$(CONFIG_ARCH_MSM8998) += \
+	chiron-msm8998-mtp.dtb \
+	chiron-msm8998-v2-mtp.dtb \
+	chiron-msm8998-v2.1-mtp.dtb
+else
+endif
+endif
+
 always		:= $(dtb-y)
 subdir-y	:= $(dts-dirs)
 clean-files	:= *.dtb
