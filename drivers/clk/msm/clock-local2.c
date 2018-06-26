@@ -1073,6 +1073,85 @@ static void __iomem *branch_clk_list_registers(struct clk *c, int n,
 	return CBCR_REG(branch);
 }
 
+static void _hw_ctl_clk_enable(struct hw_ctl_clk *hwctl_clk)
+{
+	unsigned long flags;
+	u32 cbcr_val;
+
+	spin_lock_irqsave(&local_clock_reg_lock, flags);
+	cbcr_val = readl_relaxed(CBCR_REG(hwctl_clk));
+	cbcr_val |= CBCR_HW_CTL_BIT;
+	writel_relaxed(cbcr_val, CBCR_REG(hwctl_clk));
+	spin_unlock_irqrestore(&local_clock_reg_lock, flags);
+}
+
+static int hw_ctl_clk_enable(struct clk *c)
+{
+	struct hw_ctl_clk *hwctl_clk = to_hw_ctl_clk(c);
+	struct clk *parent = c->parent;
+
+	/* The parent branch clock should have been prepared prior to this. */
+	if (!parent || (parent && !parent->prepare_count))
+		return -EINVAL;
+
+	_hw_ctl_clk_enable(hwctl_clk);
+	return 0;
+}
+
+static void _hw_ctl_clk_disable(struct hw_ctl_clk *hwctl_clk)
+{
+	unsigned long flags;
+	u32 cbcr_val;
+
+	spin_lock_irqsave(&local_clock_reg_lock, flags);
+	cbcr_val = readl_relaxed(CBCR_REG(hwctl_clk));
+	cbcr_val &= ~CBCR_HW_CTL_BIT;
+	writel_relaxed(cbcr_val, CBCR_REG(hwctl_clk));
+	spin_unlock_irqrestore(&local_clock_reg_lock, flags);
+}
+
+static void hw_ctl_clk_disable(struct clk *c)
+{
+	struct hw_ctl_clk *hwctl_clk = to_hw_ctl_clk(c);
+
+	if (!c->parent)
+		return;
+
+	_hw_ctl_clk_disable(hwctl_clk);
+}
+
+static int hw_ctl_clk_set_rate(struct clk *c, unsigned long rate)
+{
+	struct hw_ctl_clk *hwctl_clk = to_hw_ctl_clk(c);
+	struct clk *parent = c->parent;
+	int ret = 0;
+
+	if (!parent)
+		return -EINVAL;
+	/*
+	 * Switch back to SW control while doing a frequency change to avoid
+	 * having the downstream clock being gated at the same time that the
+	 * RCG rate switch happens.
+	 */
+	_hw_ctl_clk_disable(hwctl_clk);
+	ret = clk_set_rate(parent, rate);
+	if (ret)
+		return ret;
+	_hw_ctl_clk_enable(hwctl_clk);
+
+	return 0;
+}
+
+static long hw_ctl_clk_round_rate(struct clk *c, unsigned long rate)
+{
+	return clk_round_rate(c->parent, rate);
+}
+
+static unsigned long hw_ctl_clk_get_rate(struct clk *c)
+{
+	return clk_get_rate(c->parent);
+}
+
 /*
  * Voteable clock functions
  */
@@ -2265,6 +2344,14 @@ const struct clk_ops clk_ops_branch = {
 	.set_flags = branch_clk_set_flags,
 	.handoff = branch_clk_handoff,
 	.list_registers = branch_clk_list_registers,
+};
+
+const struct clk_ops clk_ops_branch_hw_ctl = {
+	.enable = hw_ctl_clk_enable,
+	.disable = hw_ctl_clk_disable,
+	.set_rate = hw_ctl_clk_set_rate,
+	.get_rate = hw_ctl_clk_get_rate,
+	.round_rate = hw_ctl_clk_round_rate,
 };
 
 const struct clk_ops clk_ops_vote = {
