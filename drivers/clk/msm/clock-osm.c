@@ -704,12 +704,12 @@ static enum handoff clk_osm_handoff(struct clk *c)
 	return HANDOFF_DISABLED_CLK;
 }
 
-static long clk_osm_list_rate(struct clk *c, unsigned n)
-{
-	if (n >= c->num_fmax)
-		return -ENXIO;
-	return c->fmax[n];
-}
+//static long clk_osm_list_rate(struct clk *c, unsigned n)
+//{
+//	if (n >= c->num_fmax)
+//		return -ENXIO;
+//	return c->fmax[n];
+//}
 
 static long clk_osm_round_rate(struct clk *c, unsigned long rate)
 {
@@ -836,7 +836,7 @@ static struct clk_ops clk_ops_cpu_osm = {
 	.enable = clk_osm_enable,
 	.set_rate = clk_osm_set_rate,
 	.round_rate = clk_osm_round_rate,
-	.list_rate = clk_osm_list_rate,
+	//.list_rate = clk_osm_list_rate,
 	.handoff = clk_osm_handoff,
 };
 
