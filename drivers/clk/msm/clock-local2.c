@@ -1772,6 +1772,45 @@ static struct clk *edp_clk_get_parent(struct clk *c)
 	return freq->src_clk;
 }
 
+static int rcg_clk_set_rate_dp(struct clk *clk, unsigned long rate)
+{
+	struct rcg_clk *rcg = to_rcg_clk(clk);
+	struct clk_freq_tbl *freq_tbl = rcg->current_freq;
+	unsigned long src_rate;
+	unsigned long num, den, flags;
+
+	src_rate = clk_get_rate(clk->parent);
+	if (src_rate <= 0) {
+		pr_err("Invalid RCG parent rate\n");
+		return -EINVAL;
+	}
+
+	rational_best_approximation(src_rate, rate,
+			(unsigned long)(1 << 16) - 1,
+			(unsigned long)(1 << 16) - 1, &den, &num);
+
+	if (!num || !den) {
+		pr_err("Invalid MN values derived for requested rate %lu\n",
+							rate);
+		return -EINVAL;
+	}
+
+	freq_tbl->div_src_val &= ~BM(4, 0);
+	if (num == den) {
+		freq_tbl->m_val = 0;
+		freq_tbl->n_val = 0;
+	} else {
+		freq_tbl->m_val = num;
+		freq_tbl->n_val = ~(den - num);
+		freq_tbl->d_val = ~den;
+	}
+
+	spin_lock_irqsave(&local_clock_reg_lock, flags);
+	__set_rate_mnd(rcg, freq_tbl);
+	spin_unlock_irqrestore(&local_clock_reg_lock, flags);
+	return 0;
+}
+
 static int gate_clk_enable(struct clk *c)
 {
 	unsigned long flags;
@@ -2331,6 +2370,15 @@ const struct clk_ops clk_ops_rcg_edp = {
 	.list_registers = rcg_hid_clk_list_registers,
 };
 
+struct clk_ops clk_ops_rcg_dp = {
+	.enable = rcg_clk_enable,
+	.disable = rcg_clk_disable,
+	.set_rate = rcg_clk_set_rate_dp,
+	.list_rate = rcg_clk_list_rate,
+	.handoff = pixel_rcg_handoff,
+	.list_registers = rcg_mnd_clk_list_registers,
+};
+
 const struct clk_ops clk_ops_branch = {
 	.enable = branch_clk_enable,
 	.prepare = branch_clk_prepare,
@@ -2346,7 +2394,7 @@ const struct clk_ops clk_ops_branch = {
 	.list_registers = branch_clk_list_registers,
 };
 
-const struct clk_ops clk_ops_branch_hw_ctl = {
+struct clk_ops clk_ops_branch_hw_ctl = {
 	.enable = hw_ctl_clk_enable,
 	.disable = hw_ctl_clk_disable,
 	.set_rate = hw_ctl_clk_set_rate,
