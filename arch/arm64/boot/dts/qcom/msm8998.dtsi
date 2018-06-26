@@ -3504,7 +3504,7 @@
 #include "msm8998-bus.dtsi"
 #include "msm8998-gpu.dtsi"
 #include "msm8998-pinctrl.dtsi"
-#include "msm-audio-lpass.dtsi"
+#include "msm-audio-lpass-8998.dtsi"
 #include "msm8998-mdss.dtsi"
 #include "msm8998-mdss-pll.dtsi"
 #include "msm-rdbg.dtsi"
