@@ -1529,9 +1529,9 @@ static void * __init setup_dummy_socinfo(void)
 		dummy_socinfo.id = 317;
 		strlcpy(dummy_socinfo.build_id, "msmfalcon - ",
 			sizeof(dummy_socinfo.build_id));
-	} else if (early_machine_is_apq8908()) {
+	} else if (early_machine_is_apq8098()) {
 		dummy_socinfo.id = 319;
-		strlcpy(dummy_socinfo.build_id, "apq8908 - ",
+		strlcpy(dummy_socinfo.build_id, "apq8098 - ",
 			sizeof(dummy_socinfo.build_id));
 	} else if (early_machine_is_sdm845()) {
 		dummy_socinfo.id = 321;

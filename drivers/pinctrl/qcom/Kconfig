@@ -166,6 +166,13 @@ config PINCTRL_SDXPOORWILLS
 	  Qualcomm Technologies Inc TLMM block found on the Qualcomm
 	  Technologies Inc SDXPOORWILLS platform.
 
+config PINCTRL_MSM8998
+	tristate "Qualcomm MSM8998 pin controller driver"
+ 	depends on GPIOLIB && OF
+ 	select PINCTRL_MSM
+ 	help
+ 	  This is the pinctrl, pinmux, pinconf and gpiolib driver for the
+	  Qualcomm TLMM block found in the Qualcomm MSM8998 platform.
 
 config PINCTRL_MSM8996
 	tristate "Qualcomm MSM8996 pin controller driver"

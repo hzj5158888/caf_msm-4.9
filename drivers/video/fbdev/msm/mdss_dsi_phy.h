@@ -26,6 +26,12 @@ enum phy_rev {
 	DSI_PHY_REV_MAX,
 };
 
+enum phy_mode {
+	DSI_PHY_MODE_DPHY = 0x00,
+	DSI_PHY_MODE_CPHY,
+	DSI_PHY_MODE_MAX,
+};
+
 /*
  * mdss_dsi_phy_calc_timing_param() - calculates clock timing and hs timing
  *				parameters for the given phy revision.
@@ -37,6 +43,54 @@ enum phy_rev {
  */
 int mdss_dsi_phy_calc_timing_param(struct mdss_panel_info *pinfo, u32 phy_rev,
 		u32 frate_hz);
+
+/*
+ * mdss_dsi_phy_v3_init() - initialization sequence for DSI PHY rev v3
+ *
+ * @ctrl: pointer to DSI controller structure
+ * @phy_mode - DSI phy operating mode (CPHY or DPHY)
+ *
+ * This function performs a sequence of register writes to initialize DSI
+ * phy revision 3.0 in either the C-PHY or the D-PHY operating mode. This
+ * function assumes that the DSI bus clocks are turned on. This function should
+ * only be called prior to enabling the DSI link clocks.
+ */
+int mdss_dsi_phy_v3_init(struct mdss_dsi_ctrl_pdata *ctrl,
+			       enum phy_mode phy_mode);
+
+/*
+ * mdss_dsi_phy_v3_shutdown() - shutdown sequence for DSI PHY rev v3
+ *
+ * @ctrl: pointer to DSI controller structure
+ *
+ * Perform a sequence of register writes to completely shut down DSI PHY
+ * revision 3.0. This function assumes that the DSI bus clocks are turned on.
+ */
+int mdss_dsi_phy_v3_shutdown(struct mdss_dsi_ctrl_pdata *ctrl);
+
+/*
+ * mdss_dsi_phy_v3_regulator_enable() - enable lane regulators for DSI PHY v3
+ *
+ * @ctrl: pointer to DSI controller structure
+ */
+int mdss_dsi_phy_v3_regulator_enable(struct mdss_dsi_ctrl_pdata *ctrl);
+
+/*
+ * mdss_dsi_phy_v3_regulator_disable() - disable lane regulators for DSI PHY v3
+ *
+ * @ctrl: pointer to DSI controller structure
+ */
+int mdss_dsi_phy_v3_regulator_disable(struct mdss_dsi_ctrl_pdata *ctrl);
+
+/*
+ * mdss_dsi_phy_v3_toggle_resync_fifo() - toggle resync re-time FIFO
+ *
+ * @ctrl: pointer to DSI controller structure
+ *
+ * Resync the re-time FIFO in the DSI PHY by turning it off and turning
+ * it back on.
+ */
+void mdss_dsi_phy_v3_toggle_resync_fifo(struct mdss_dsi_ctrl_pdata *ctrl);
 
 /*
  * mdss_dsi_12nm_phy_regulator_enable() - enable lane reg for DSI 12nm PHY
