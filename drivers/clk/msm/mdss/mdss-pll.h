@@ -15,6 +15,7 @@
 
 #include <linux/mdss_io_util.h>
 #include <linux/io.h>
+#include <linux/clk-provider.h>
 
 #define MDSS_PLL_REG_W(base, offset, data)	\
 				writel_relaxed((data), (base) + (offset))
@@ -181,6 +182,27 @@ static inline bool is_gdsc_disabled(struct mdss_pll_resources *pll_res)
 
 	return ((readl_relaxed(pll_res->gdsc_base + 0x4) & BIT(31)) &&
 		(!(readl_relaxed(pll_res->gdsc_base) & BIT(0)))) ? false : true;
+}
+
+static inline int mdss_pll_div_prepare(struct clk_hw *hw)
+{
+	struct clk_hw *parent_hw = clk_hw_get_parent(hw);
+	/* Restore the divider's value */
+	return hw->init->ops->set_rate(hw, clk_hw_get_rate(hw),
+				clk_hw_get_rate(parent_hw));
+}
+
+static inline int mdss_set_mux_sel(void *context, unsigned int reg,
+					unsigned int val)
+{
+	return 0;
+}
+
+static inline int mdss_get_mux_sel(void *context, unsigned int reg,
+					unsigned int *val)
+{
+	*val = 0;
+	return 0;
 }
 
 int mdss_pll_resource_enable(struct mdss_pll_resources *pll_res, bool enable);
