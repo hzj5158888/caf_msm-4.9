@@ -16,6 +16,7 @@
 #include <linux/mdss_io_util.h>
 #include <linux/io.h>
 #include <linux/clk-provider.h>
+#include <linux/clk/msm-clock-generic.h>
 
 #define MDSS_PLL_REG_W(base, offset, data)	\
 				writel_relaxed((data), (base) + (offset))
@@ -196,16 +197,13 @@ static inline int mdss_pll_div_prepare(struct clk *c)
 	return div->ops->set_div(div, div->data.div);
 }
 
-static inline int mdss_set_mux_sel(void *context, unsigned int reg,
-					unsigned int val)
+static inline int mdss_set_mux_sel(struct mux_clk *clk, int sel)
 {
 	return 0;
 }
 
-static inline int mdss_get_mux_sel(void *context, unsigned int reg,
-					unsigned int *val)
+static inline int mdss_get_mux_sel(struct mux_clk *clk)
 {
-	*val = 0;
 	return 0;
 }
 
