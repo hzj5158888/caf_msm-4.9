@@ -24,6 +24,7 @@
 #include "mdss-pll.h"
 #include "mdss-dsi-pll.h"
 #include "mdss-hdmi-pll.h"
+#include "mdss-dp-pll.h"
 
 int mdss_pll_resource_enable(struct mdss_pll_resources *pll_res, bool enable)
 {
