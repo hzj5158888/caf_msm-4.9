@@ -189,12 +189,11 @@ static inline bool is_gdsc_disabled(struct mdss_pll_resources *pll_res)
 		(!(readl_relaxed(pll_res->gdsc_base) & BIT(0)))) ? false : true;
 }
 
-static inline int mdss_pll_div_prepare(struct clk_hw *hw)
+static inline int mdss_pll_div_prepare(struct clk *c)
 {
-	struct clk_hw *parent_hw = clk_hw_get_parent(hw);
+	struct div_clk *div = to_div_clk(c);
 	/* Restore the divider's value */
-	return hw->init->ops->set_rate(hw, clk_hw_get_rate(hw),
-				clk_hw_get_rate(parent_hw));
+	return div->ops->set_div(div, div->data.div);
 }
 
 static inline int mdss_set_mux_sel(void *context, unsigned int reg,
