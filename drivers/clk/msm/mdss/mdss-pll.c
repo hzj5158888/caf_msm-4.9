@@ -143,10 +143,10 @@ static int mdss_pll_resource_parse(struct platform_device *pdev,
 		pll_res->pll_interface_type = MDSS_DSI_PLL_8998;
 		pll_res->target_id = MDSS_PLL_TARGET_8998;
 		pll_res->revision = 1;
-	} else if (!strcmp(compatible_stream, "qcom,mdss_dsi_pll_8998_v2")) {
-		pll_res->pll_interface_type = MDSS_DSI_PLL_8998;
+ 	} else if (!strcmp(compatible_stream, "qcom,mdss_dp_pll_8998")) {
+		pll_res->pll_interface_type = MDSS_DP_PLL_8998;
 		pll_res->target_id = MDSS_PLL_TARGET_8998;
-		pll_res->revision = 2;
+		pll_res->revision = 1;
 	} else if (!strcmp(compatible_stream, "qcom,mdss_dsi_pll_8996")) {
 		pll_res->pll_interface_type = MDSS_DSI_PLL_8996;
 		pll_res->target_id = MDSS_PLL_TARGET_8996;
@@ -161,12 +161,12 @@ static int mdss_pll_resource_parse(struct platform_device *pdev,
 		pll_res->revision = 2;
 	} else if (!strcmp(compatible_stream, "qcom,mdss_hdmi_pll_8996")) {
 		pll_res->pll_interface_type = MDSS_HDMI_PLL_8996;
-	} else if (!strcmp(compatible_stream, "qcom,mdss_hdmi_pll_8998")) {
-		pll_res->pll_interface_type = MDSS_HDMI_PLL_8998;
+ 	} else if (!strcmp(compatible_stream, "qcom,mdss_hdmi_pll_8998")) {
+		pll_res->pll_interface_type = MDSS_HDMI_PLL_8998_3_3;
+	} else if (!strcmp(compatible_stream, "qcom,mdss_hdmi_pll_8998_1p8")) {
+		pll_res->pll_interface_type = MDSS_HDMI_PLL_8998_1_8;
 	} else if (!strcmp(compatible_stream, "qcom,mdss_hdmi_pll_8996_v2")) {
 		pll_res->pll_interface_type = MDSS_HDMI_PLL_8996_V2;
-	} else if (!strcmp(compatible_stream, "qcom,mdss_hdmi_pll_8998_v2")) {
-		pll_res->pll_interface_type = MDSS_HDMI_PLL_8998_V2;
 	} else if (!strcmp(compatible_stream, "qcom,mdss_hdmi_pll_8996_v3")) {
 		pll_res->pll_interface_type = MDSS_HDMI_PLL_8996_V3;
 	} else if (!strcmp(compatible_stream,
@@ -204,14 +204,20 @@ static int mdss_pll_clock_register(struct platform_device *pdev,
 	case MDSS_DSI_PLL_8998:
 		rc = dsi_pll_clock_register_8998(pdev, pll_res);
 		break;
+ 	case MDSS_DP_PLL_8998:
+ 		rc = dp_pll_clock_register_8998(pdev, pll_res);
+		break;
 	case MDSS_DSI_PLL_12NM:
 		rc = dsi_pll_clock_register_12nm(pdev, pll_res);
 		break;
 	case MDSS_HDMI_PLL_8996:
 		rc = hdmi_8996_v1_pll_clock_register(pdev, pll_res);
 		break;
-	case MDSS_HDMI_PLL_8998:
-		rc = hdmi_8998_v1_pll_clock_register(pdev, pll_res);
+	case MDSS_HDMI_PLL_8998_3_3:
+		rc = hdmi_8998_3p3_pll_clock_register(pdev, pll_res);
+		break;
+	case MDSS_HDMI_PLL_8998_1_8:
+		rc = hdmi_8998_1p8_pll_clock_register(pdev, pll_res);
 		break;
 	case MDSS_HDMI_PLL_8996_V2:
 		rc = hdmi_8996_v2_pll_clock_register(pdev, pll_res);
@@ -418,7 +424,6 @@ static int mdss_pll_remove(struct platform_device *pdev)
 
 static const struct of_device_id mdss_pll_dt_match[] = {
 	{.compatible = "qcom,mdss_dsi_pll_8998"},
-	{.compatible = "qcom,mdss_dsi_pll_8998_v2"},
 	{.compatible = "qcom,mdss_dsi_pll_8996"},
 	{.compatible = "qcom,mdss_dsi_pll_8996_v2"},
 	{.compatible = "qcom,mdss_hdmi_pll_8996"},
