@@ -22,6 +22,7 @@ enum phy_rev {
 	DSI_PHY_REV_UNKNOWN = 0x00,
 	DSI_PHY_REV_10 = 0x01,	/* REV 1.0 - 20nm, 28nm */
 	DSI_PHY_REV_20 = 0x02,	/* REV 2.0 - 14nm */
+	DSI_PHY_REV_30 = 0x03,  /* REV 3.0 */
 	DSI_PHY_REV_12NM = 0x03, /* 12nm PHY */
 	DSI_PHY_REV_MAX,
 };
