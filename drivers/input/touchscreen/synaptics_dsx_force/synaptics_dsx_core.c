@@ -1482,7 +1482,7 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 #if defined(REPORT_2D_PRESSURE) || defined(F51_DISCRETE_FORCE)
 	int pressure;
 #endif
-	//int touchs;
+	int touchs;
 #ifdef REPORT_2D_PRESSURE
 	unsigned char f_fingers;
 	unsigned char f_lsb;
@@ -1710,7 +1710,7 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 
 			finger_presence = 1;
 			touch_count++;
-			//touchs |= BIT(finger);
+			touchs |= BIT(finger);
 			rmi4_data->touchs |= BIT(finger);
 			break;
 		case F12_PALM_STATUS:
@@ -1759,17 +1759,17 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 					MT_TOOL_FINGER, 0);
 #endif
 			rmi4_data->touchs &= ~BIT(finger);
-			//touchs &= ~BIT(finger);
+			touchs &= ~BIT(finger);
 			break;
 		}
 	}
 
 	for (finger = 0; finger < fhandler->num_of_data_points; finger++) {
-		//if (BIT(finger) & (rmi4_data->touchs ^ touchs)) {
+		if (BIT(finger) & (rmi4_data->touchs ^ touchs)) {
 			input_mt_slot(rmi4_data->input_dev, finger);
 			input_mt_report_slot_state(rmi4_data->input_dev,
 					MT_TOOL_FINGER, 0);
-		//}
+		}
 	}
 
 	if (touch_count == 0) {
